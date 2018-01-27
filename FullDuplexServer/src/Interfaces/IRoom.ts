@@ -1,5 +1,8 @@
+import {IPoint} from "./IPoint";
+
 export interface IRoom {
     description: string;
+    coords: IPoint;
 
     north: IRoom;
     east: IRoom;

@@ -5,6 +5,7 @@ import {DoorRoom} from "./GameObjects/Rooms/DoorRoom";
 
 export class GameMap {
     private mapData: Array<Array<IRoom>>;
+    public doors: Array<DoorRoom>;
 
     static fromString(serializedMap: string) {
         let map = new GameMap();
@@ -21,7 +22,11 @@ export class GameMap {
                     line.push(new EmptyRoom());
                     break;
                 case "d":
-                    line.push(new DoorRoom());
+                    let newRoom = new DoorRoom();
+                    line.push(newRoom);
+                    map.doors.push(newRoom);
+                    break;
+                case " ":
                     break;
                 default:
                     throw new Error("Oh dear. That's not a valid character in the map.");
@@ -45,6 +50,7 @@ export class GameMap {
                     northRoom.south = room;
                     room.north = northRoom;
                 }
+                room.coords = {x: x, y: y};
             })
         });
     }
