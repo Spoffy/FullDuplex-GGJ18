@@ -1,6 +1,7 @@
 import {ICommand} from "./Interfaces/ICommand";
 import {GameMap} from "./GameMap";
 import {Game} from "./Game";
+import {Direction} from "./Direction";
 
 export class Commands {
     static ping: ICommand = (params, message, dataStore) => {
@@ -37,10 +38,33 @@ export class Commands {
             return;
         }
         if(!game.isAvatarPlayer(message.author.id)) {
-            message.reply("You are not there, and cannot see anything.")
+            message.reply("You are not controlling a character, you are playing the overwatch role.")
             return;
         }
-        message.reply("You are in: " + game.getAvatarRoom().description);
+        message.reply("You are in: " + game.avatar.room.description);
         return true;
-    }
+    };
+
+    static move: ICommand = (params, message, dataStore): boolean => {
+        let game = dataStore.playerGames[message.author.id];
+        if(!game) {
+            message.reply("You are not currently in a game.");
+            return;
+        }
+        if(!game.isAvatarPlayer(message.author.id)) {
+            message.reply("You are not controlling a character, you are playing the overwatch role.");
+            return;
+        }
+        let direction = params[0];
+        if(!direction || !(Direction[direction.toUpperCase()])) {
+            message.reply("That is not a valid direction");
+        }
+        game.avatar.move(Direction[direction.toUpperCase()]).then(() =>{
+               message.reply("You move " + direction + "into a new room. You are in " + game.avatar.room.description);
+           }, (reason) => {
+               message.reply("You try to move " + direction + ", but " + reason);
+           });
+
+        return true;
+    };
 }

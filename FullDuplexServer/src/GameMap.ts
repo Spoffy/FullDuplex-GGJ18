@@ -24,10 +24,28 @@ export class GameMap {
             }
         }
 
+        map.connect();
         return map;
     }
 
-    getRoom(loc: IPoint) {
-        return this.mapData[loc.x][loc.y];
+    private connect() {
+        this.mapData.forEach((line, y) => {
+            line.forEach((room, x) => {
+                let westRoom = this.getRoom({x: x - 1, y: y});
+                let northRoom = this.getRoom({x: x, y: y - 1});
+                if(room && westRoom) {
+                    westRoom.east = room;
+                    room.west = westRoom;
+                }
+                if(room && northRoom) {
+                    northRoom.south = room;
+                    room.north = northRoom;
+                }
+            })
+        });
+    }
+
+    getRoom(loc: IPoint): IRoom {
+        return this.mapData[loc.y]? this.mapData[loc.y][loc.x] : null;
     }
 }

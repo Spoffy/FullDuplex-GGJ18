@@ -1,5 +1,5 @@
-import {IRoom} from "../../Interfaces/IRoom";
+import {BaseRoom} from "./BaseRoom";
 
-export class EmptyRoom implements IRoom {
+export class EmptyRoom extends BaseRoom {
     description = "A stretch of empty, metallic corridor."
 }
