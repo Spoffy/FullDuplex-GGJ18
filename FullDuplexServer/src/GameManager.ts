@@ -53,7 +53,7 @@ export class GameManager {
 
     createNewGame(playerToJoin: IUser): Game {
         //Create a new game, if none is available.
-        let serializedMap = "xxxx\n" +
+        let serializedMap = "xxxE\n" +
                             "  x \n" +
                             "xxx \n" +
                             "xx x\n" +
@@ -62,7 +62,7 @@ export class GameManager {
 
         let newGame = this.dataStore.playerGames[playerToJoin.user.id] = new Game(map);
         newGame.remotePlayer = playerToJoin;
-        //newGame.avatarPlayer = playerToJoin;
+        newGame.avatarPlayer = playerToJoin;
 
         playerToJoin.channel.send("A new game has been started! Wait for someone to join." +
             "\nYou are acting as remote overwatch. Help the wanderer reach the end of the maze.",
@@ -81,5 +81,10 @@ export class GameManager {
             otherPlayer.channel.send("The other player has left the game, so the game jhas exited.", {reply: otherPlayer.user});
         }
         player.channel.send("You have left the game, and are free to join another game.");
+    }
+
+    win(game: Game) {
+        game.avatarPlayer.channel.send("You did it!");
+        game.remotePlayer.channel.send("You did it!");
     }
 }

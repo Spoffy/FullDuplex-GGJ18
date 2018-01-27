@@ -1,6 +1,4 @@
 import {ICommand} from "./Interfaces/ICommand";
-import {GameMap} from "./GameMap";
-import {Game} from "./Game";
 import {Direction} from "./Direction";
 import {DoorRoom} from "./GameObjects/Rooms/DoorRoom";
 import {TextChannel} from "discord.js"
@@ -12,7 +10,6 @@ export class Commands {
         return true;
     };
 
-    //CAN YOU JOIN A GAME WITH YOURSELF?
     static joingame: ICommand = (params, message, dataStore) => {
         let gameManager = new GameManager(dataStore);
 
@@ -73,6 +70,11 @@ export class Commands {
         return true;
     };
 
+    static n: ICommand = (params, message, dataStore) => Commands.move(["north"], message, dataStore);
+    static e: ICommand = (params, message, dataStore) => Commands.move(["east"], message, dataStore);
+    static s: ICommand = (params, message, dataStore) => Commands.move(["south"], message, dataStore);
+    static w: ICommand = (params, message, dataStore) => Commands.move(["west"], message, dataStore);
+
     static doors: ICommand = (params, message, dataStore): boolean => {
         let game = dataStore.playerGames[message.author.id];
         if(!game) {
@@ -108,11 +110,20 @@ export class Commands {
             message.reply("Command Rejected: No door exists with that identifier.");
         }
         return true;
-    }
+    };
 
     static debug: ICommand = (params, message, dataStore): boolean => {
         let game = new GameManager(dataStore).findGameInProgress(message.author.id);
         console.log(game.map.mapData.map((line) => line.map((room) => {if (room) return "x"})));
+        return true;
+    };
+
+    static exit: ICommand = (params, message, dataStore): boolean => {
+        let gameManager = new GameManager(dataStore);
+        let game = gameManager.findGameInProgress(message.author.id);
+        if(game.avatar.room.constructor.name.toString() == "ExitRoom") {
+            gameManager.win(game);
+        }
         return true;
     }
 }

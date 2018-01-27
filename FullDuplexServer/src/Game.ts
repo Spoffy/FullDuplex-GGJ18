@@ -15,10 +15,10 @@ export class Game {
     }
 
     isAvatarPlayer(playerId: Snowflake): boolean {
-        return this.avatarPlayer.user.id == playerId;
+        return this.avatarPlayer && this.avatarPlayer.user.id == playerId;
     }
 
     isRemotePlayer(playerId: Snowflake): boolean {
-        return this.remotePlayer.user.id == playerId;
+        return this.remotePlayer && this.remotePlayer.user.id == playerId;
     }
 }
