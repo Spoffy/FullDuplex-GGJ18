@@ -3,9 +3,10 @@ import {EmptyRoom} from "./GameObjects/Rooms/EmptyRoom";
 import {IPoint} from "./Interfaces/IPoint";
 import {DoorRoom} from "./GameObjects/Rooms/DoorRoom";
 import {NATOAlphabetNameGenerator} from "./Helpers/NATOAlphabetNameGenerator";
+import {ExitRoom} from "./GameObjects/Rooms/ExitRoom";
 
 export class GameMap {
-    private mapData: Array<Array<IRoom>>;
+    public mapData: Array<Array<IRoom>>;
     public doors: Array<DoorRoom>;
 
     private constructor() {};
@@ -32,7 +33,11 @@ export class GameMap {
                     line.push(newRoom);
                     map.doors.push(newRoom);
                     break;
+                case "E":
+                    line.push(new ExitRoom());
+                    break;
                 case " ":
+                    line.push(null);
                     break;
                 default:
                     throw new Error("Oh dear. That's not a valid character in the map.");
@@ -46,6 +51,7 @@ export class GameMap {
     private connect() {
         this.mapData.forEach((line, y) => {
             line.forEach((room, x) => {
+                if(!room) { return; }
                 let westRoom = this.getRoom({x: x - 1, y: y});
                 let northRoom = this.getRoom({x: x, y: y - 1});
                 if(room && westRoom) {

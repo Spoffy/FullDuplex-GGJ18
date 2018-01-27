@@ -31,8 +31,8 @@ export class Commands {
     };
 
     static quit: ICommand = (params, message, dataStore) => {
-        delete dataStore.playerGames[message.author.id];
-        message.reply("You've quit your game, and can now start a new one.");
+        let gameManager: GameManager = new GameManager(dataStore);
+        gameManager.quit(message.author.id);
         return true;
     };
 
@@ -107,6 +107,12 @@ export class Commands {
         } else {
             message.reply("Command Rejected: No door exists with that identifier.");
         }
+        return true;
+    }
+
+    static debug: ICommand = (params, message, dataStore): boolean => {
+        let game = new GameManager(dataStore).findGameInProgress(message.author.id);
+        console.log(game.map.mapData.map((line) => line.map((room) => {if (room) return "x"})));
         return true;
     }
 }
