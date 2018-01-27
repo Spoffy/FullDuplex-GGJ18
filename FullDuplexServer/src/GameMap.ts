@@ -7,7 +7,7 @@ export class GameMap {
 
     public static fromString(serializedMap: string) {
         let map = new GameMap();
-        map.mapData = []
+        map.mapData = [];
 
         let line = [];
         for(let char of serializedMap) {
@@ -23,6 +23,8 @@ export class GameMap {
                     throw new Error("Oh dear. That's not a valid character in the map.");
             }
         }
+
+        return map;
     }
 
     public getRoom(loc: IPoint) {
