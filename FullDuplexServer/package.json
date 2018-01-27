@@ -1,0 +1,13 @@
+{
+  "name": "full-duplex-server",
+  "version": "0.0.0",
+  "description": "FullDuplexServer",
+  "main": "app.js",
+  "author": {
+    "name": "cs14g13"
+  },
+  "dependencies": {
+    "@types/node": "^9.4.0",
+    "discord.js": "^11.3.0"
+  }
+}
