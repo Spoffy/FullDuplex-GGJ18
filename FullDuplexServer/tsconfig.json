@@ -5,11 +5,12 @@
     "noEmitOnError": true,
     "removeComments": false,
     "sourceMap": true,
-    "target": "es6"
+    "target": "es6",
+    "types": [ "node", "discord.js"],
+    "outDir": "bin/"
   },
   "include": [
-    "src/**/*",
-    "node_modules/@types/**/*"
+    "src/**/*"
   ],
   "exclude": [
     "node_modules"
