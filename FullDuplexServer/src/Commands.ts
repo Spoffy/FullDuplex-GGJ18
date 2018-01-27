@@ -4,6 +4,7 @@ import {Game} from "./Game";
 import {Direction} from "./Direction";
 import {DoorRoom} from "./GameObjects/Rooms/DoorRoom";
 import {TextChannel} from "discord.js"
+import {GameManager} from "./GameManager";
 
 export class Commands {
     static ping: ICommand = (params, message, dataStore) => {
@@ -11,20 +12,21 @@ export class Commands {
         return true;
     };
 
+    //CAN YOU JOIN A GAME WITH YOURSELF?
     static joingame: ICommand = (params, message, dataStore) => {
-        let game: Game = dataStore.playerGames[message.author.id];
-        if(game) {
+        let gameManager = new GameManager(dataStore);
+
+        let playerToJoin = {user: message.author, channel: <TextChannel>message.channel, server: message.guild}
+        if(gameManager.findGameInProgress(playerToJoin.user.id)) {
             message.reply("There is already a game in progress. Do you wish to abandon it? Use ?quit");
             return;
         }
-        let serializedMap = "xxxx\nddxd\nxxxx\nxxxx\ndddddddddddddddddddddddddddddddddddd";
-        let map = GameMap.fromString(serializedMap);
 
-        game = dataStore.playerGames[message.author.id] = new Game(map);
-        game.remotePlayer = {user: message.author, channel: <TextChannel>message.channel, server: message.guild};
-        game.avatarPlayer = {user: message.author, channel: <TextChannel>message.channel, server: message.guild};
+        if(gameManager.findAndJoinOpenGame(playerToJoin)) {
+            return;
+        }
 
-        message.reply("A new game has been started!")
+        gameManager.createNewGame(playerToJoin);
         return true;
     };
 
