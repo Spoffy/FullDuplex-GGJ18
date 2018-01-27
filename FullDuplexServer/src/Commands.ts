@@ -16,7 +16,9 @@ export class Commands {
         let serializedMap = "xxxx\nxxxx\nxxxx\nxxxx";
         let map = GameMap.fromString(serializedMap);
 
-        dataStore.playerGames[message.author.id] = new Game(map);
+        let game = dataStore.playerGames[message.author.id] = new Game(map);
+        game.overwatchPlayer = message.author.id;
+        game.avatarPlayer = message.author.id;
 
         message.reply("A new game has been started!")
         return true;
@@ -30,7 +32,15 @@ export class Commands {
 
     static look: ICommand = (params, message, dataStore) => {
         let game = dataStore.playerGames[message.author.id];
-        message.reply("You are in: ", )
+        if(!game) {
+            message.reply("You are not currently in a game.");
+            return;
+        }
+        if(!game.isAvatarPlayer(message.author.id)) {
+            message.reply("You are not there, and cannot see anything.")
+            return;
+        }
+        message.reply("You are in: " + game.getAvatarRoom().description);
         return true;
     }
 }

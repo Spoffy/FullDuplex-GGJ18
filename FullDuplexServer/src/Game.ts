@@ -2,6 +2,7 @@ import {Avatar} from "./GameObjects/Avatar";
 import {GameMap} from "./GameMap";
 import {IRoom} from "./Interfaces/IRoom";
 import {Snowflake} from "discord.js";
+import {boolToPromise} from "./Helpers/BooleanPromise";
 
 export class Game {
     overwatchPlayer: Snowflake;
@@ -16,5 +17,9 @@ export class Game {
 
     getAvatarRoom(): IRoom {
         return this.map.getRoom(this.avatar.location);
+    }
+
+    isAvatarPlayer(playerId: Snowflake): boolean {
+        return this.avatarPlayer == playerId;
     }
 }
