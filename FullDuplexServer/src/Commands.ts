@@ -2,6 +2,7 @@ import {ICommand} from "./Interfaces/ICommand";
 import {GameMap} from "./GameMap";
 import {Game} from "./Game";
 import {Direction} from "./Direction";
+import {DoorRoom} from "./GameObjects/Rooms/DoorRoom";
 
 export class Commands {
     static ping: ICommand = (params, message, dataStore) => {
@@ -18,7 +19,7 @@ export class Commands {
         let map = GameMap.fromString(serializedMap);
 
         let game = dataStore.playerGames[message.author.id] = new Game(map);
-        game.overwatchPlayer = message.author.id;
+        game.remotePlayer = message.author.id;
         game.avatarPlayer = message.author.id;
 
         message.reply("A new game has been started!")
@@ -38,7 +39,7 @@ export class Commands {
             return;
         }
         if(!game.isAvatarPlayer(message.author.id)) {
-            message.reply("You are not controlling a character, you are playing the overwatch role.")
+            message.reply("You are not controlling a character, you are remotely accessing the site.")
             return;
         }
         message.reply("You are in: " + game.avatar.room.description);
@@ -52,7 +53,7 @@ export class Commands {
             return;
         }
         if(!game.isAvatarPlayer(message.author.id)) {
-            message.reply("You are not controlling a character, you are playing the overwatch role.");
+            message.reply("You are not controlling a character, you are remotely accessing the site.");
             return;
         }
         let direction = params[0];
@@ -67,4 +68,20 @@ export class Commands {
 
         return true;
     };
+
+    static doors: ICommand = (params, message, dataStore): boolean => {
+        let game = dataStore.playerGames[message.author.id];
+        if(!game) {
+            message.reply("You are not currently in a game.");
+            return;
+        }
+        if(!game.isRemotePlayer(message.author.id)) {
+            message.reply("You've seen quite a few doors in your lifetime.");
+            return;
+        }
+        message.reply(game.map.doors.reduce((content: string, door: DoorRoom) => {
+           return content + `Door at ${door.coords.x},${door.coords.y} - __Status__: ` + (door.isAccessible? "**OPEN**" : "**CLOSED**") + "\n";
+        }, "\n"));
+        return true;
+    }
 }

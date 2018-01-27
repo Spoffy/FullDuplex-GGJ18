@@ -3,7 +3,7 @@ import {GameMap} from "./GameMap";
 import {Snowflake} from "discord.js";
 
 export class Game {
-    overwatchPlayer: Snowflake;
+    remotePlayer: Snowflake;
     avatarPlayer: Snowflake;
 
     avatar: Avatar;
@@ -16,5 +16,9 @@ export class Game {
 
     isAvatarPlayer(playerId: Snowflake): boolean {
         return this.avatarPlayer == playerId;
+    }
+
+    isRemotePlayer(playerId: Snowflake): boolean {
+        return this.remotePlayer == playerId;
     }
 }

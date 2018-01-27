@@ -7,9 +7,12 @@ export class GameMap {
     private mapData: Array<Array<IRoom>>;
     public doors: Array<DoorRoom>;
 
+    private constructor() {};
+
     static fromString(serializedMap: string) {
         let map = new GameMap();
         map.mapData = [];
+        map.doors = [];
 
         let line = [];
         for(let char of serializedMap) {
