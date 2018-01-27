@@ -5,9 +5,17 @@ import {DoorRoom} from "./GameObjects/Rooms/DoorRoom";
 import {NATOAlphabetNameGenerator} from "./Helpers/NATOAlphabetNameGenerator";
 import {ExitRoom} from "./GameObjects/Rooms/ExitRoom";
 
+export type MapData<T> = Array<Array<T>>;
+
 export class GameMap {
-    public mapData: Array<Array<IRoom>>;
+    public mapData: MapData<IRoom>;
     public doors: Array<DoorRoom>;
+
+    static CHARMAP = {
+        "DoorRoom": "d",
+        "EmptyRoom": "x",
+        "ExitRoom": "E"
+    };
 
     private constructor() {};
 
@@ -69,5 +77,24 @@ export class GameMap {
 
     getRoom(loc: IPoint): IRoom {
         return this.mapData[loc.y]? this.mapData[loc.y][loc.x] : null;
+    }
+
+    getCharacterRepresentation(room: IRoom, loc?: IPoint, layers: Array<(room, IPoint, string?) => string> = []) {
+        let roomChar = room? GameMap.CHARMAP[room.constructor.name] : " ";
+        return layers.reduce((char, func) => func(room, loc, char), roomChar);
+    }
+
+    toString(layers: Array<(room, IPoint, string?) => string> = []) {
+        return this.mapData.reduce((output, row, y) => {
+            return row.reduce((innerOutput, room, x): string => {
+                return innerOutput + this.getCharacterRepresentation(room, {x: x, y: y}, layers);
+            }, output + "\n");
+        }, "")
+    }
+}
+
+export function BooleanMapFilter(filterMap: MapData<boolean>) {
+    return function(room: IRoom, point: IPoint, char: string) {
+        return filterMap[point.y] && filterMap[point.y][point.x]? char : " ";
     }
 }

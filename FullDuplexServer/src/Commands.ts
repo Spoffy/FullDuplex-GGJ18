@@ -3,6 +3,7 @@ import {Direction} from "./Direction";
 import {DoorRoom} from "./GameObjects/Rooms/DoorRoom";
 import {TextChannel} from "discord.js"
 import {GameManager} from "./GameManager";
+import {BooleanMapFilter} from "./GameMap";
 
 export class Commands {
     static ping: ICommand = (params, message, dataStore) => {
@@ -114,7 +115,8 @@ export class Commands {
 
     static debug: ICommand = (params, message, dataStore): boolean => {
         let game = new GameManager(dataStore).findGameInProgress(message.author.id);
-        console.log(game.map.mapData.map((line) => line.map((room) => {if (room) return "x"})));
+        //console.log(game.map.mapData.map((line) => line.map((room) => {if (room) return "x"})));
+        console.log(game.map.toString([BooleanMapFilter([[true, true, true, true]])]));
         return true;
     };
 

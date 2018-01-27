@@ -7,6 +7,7 @@ export class Game {
     avatarPlayer: {user: User, channel: TextChannel, server: Guild};
 
     avatar: Avatar;
+    knownMap: Array<Array<boolean>>;
     map: GameMap;
 
     constructor(map: GameMap) {
