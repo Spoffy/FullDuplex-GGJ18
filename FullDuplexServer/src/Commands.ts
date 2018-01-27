@@ -34,7 +34,7 @@ export class Commands {
     };
 
     static look: ICommand = (params, message, dataStore) => {
-        let game = dataStore.playerGames[message.author.id];
+        let game = new GameManager(dataStore).findGameInProgress(message.author.id);
         if(!game) {
             message.reply("You are not currently in a game.");
             return;
@@ -48,7 +48,7 @@ export class Commands {
     };
 
     static move: ICommand = (params, message, dataStore): boolean => {
-        let game = dataStore.playerGames[message.author.id];
+        let game = new GameManager(dataStore).findGameInProgress(message.author.id);
         if(!game) {
             message.reply("You are not currently in a game.");
             return;
