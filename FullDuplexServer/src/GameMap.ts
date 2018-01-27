@@ -2,6 +2,7 @@ import {IRoom} from "./Interfaces/IRoom";
 import {EmptyRoom} from "./GameObjects/Rooms/EmptyRoom";
 import {IPoint} from "./Interfaces/IPoint";
 import {DoorRoom} from "./GameObjects/Rooms/DoorRoom";
+import {NATOAlphabetNameGenerator} from "./Helpers/NATOAlphabetNameGenerator";
 
 export class GameMap {
     private mapData: Array<Array<IRoom>>;
@@ -14,6 +15,8 @@ export class GameMap {
         map.mapData = [];
         map.doors = [];
 
+        let doorNameGenerator = new NATOAlphabetNameGenerator();
+
         let line = [];
         for(let char of serializedMap) {
             switch(char) {
@@ -25,7 +28,7 @@ export class GameMap {
                     line.push(new EmptyRoom());
                     break;
                 case "d":
-                    let newRoom = new DoorRoom();
+                    let newRoom = new DoorRoom(doorNameGenerator.next());
                     line.push(newRoom);
                     map.doors.push(newRoom);
                     break;

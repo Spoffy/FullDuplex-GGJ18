@@ -15,7 +15,7 @@ export class Commands {
             message.reply("There is already a game in progress. Do you wish to abandon it? Use ?quit");
             return;
         }
-        let serializedMap = "xxxx\nddxd\nxxxx\nxxxx";
+        let serializedMap = "xxxx\nddxd\nxxxx\nxxxx\ndddddddddddddddddddddddddddddddddddd";
         let map = GameMap.fromString(serializedMap);
 
         let game = dataStore.playerGames[message.author.id] = new Game(map);
@@ -80,8 +80,29 @@ export class Commands {
             return;
         }
         message.reply(game.map.doors.reduce((content: string, door: DoorRoom) => {
-           return content + `Door at ${door.coords.x},${door.coords.y} - __Status__: ` + (door.isAccessible? "**OPEN**" : "**CLOSED**") + "\n";
-        }, "\n"));
+           return content + `Door: ${door.name} - __Status__: ` + (door.isAccessible? "**OPEN**" : "**CLOSED**") + "\n";
+        }, "Command Accepted:\n"));
+        return true;
+    };
+
+    static open: ICommand = (params, message, dataStore): boolean => {
+        let game = dataStore.playerGames[message.author.id];
+        if(!game) {
+            message.reply("You are not currently in a game.");
+            return;
+        }
+        if(!game.isRemotePlayer(message.author.id)) {
+            message.reply("You don't feel like you could open any of the doors here... they're all sealed tight.");
+            return;
+        }
+        let name = params[0] || "";
+        let door = game.map.doors.find((door) => door.name == name);
+        if(door) {
+            door.isAccessible = true;
+            message.reply("Command Accepted: Opening door " + door.name);
+        } else {
+            message.reply("Command Rejected: No door exists with that identifier.");
+        }
         return true;
     }
 }
