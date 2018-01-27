@@ -1,6 +1,9 @@
 import {BaseRoom} from "./BaseRoom";
 
 export class DoorRoom extends BaseRoom {
+    inaccessibleReason = "a large, reinforced steel door blocks your path. There is no clear way to open it."
+    isAccessible = false;
+
     private descriptionStart = "a short stretch of metal-walled corridor";
 
     get description(): string {
