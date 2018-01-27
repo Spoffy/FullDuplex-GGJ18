@@ -4,8 +4,10 @@ import {IPoint} from "./Interfaces/IPoint";
 import {DoorRoom} from "./GameObjects/Rooms/DoorRoom";
 import {NATOAlphabetNameGenerator} from "./Helpers/NATOAlphabetNameGenerator";
 import {ExitRoom} from "./GameObjects/Rooms/ExitRoom";
+import {Avatar} from "./GameObjects/Avatar";
 
 export type MapData<T> = Array<Array<T>>;
+export type MapLayer = (room: IRoom, mapCoord: IPoint, char: string) => string;
 
 export class GameMap {
     public mapData: MapData<IRoom>;
@@ -16,6 +18,8 @@ export class GameMap {
         "EmptyRoom": "x",
         "ExitRoom": "E"
     };
+
+    static MAPKEY = "E = The Exit  |  d = Door  | x = Corridor";
 
     private constructor() {};
 
@@ -79,22 +83,32 @@ export class GameMap {
         return this.mapData[loc.y]? this.mapData[loc.y][loc.x] : null;
     }
 
-    getCharacterRepresentation(room: IRoom, loc?: IPoint, layers: Array<(room, IPoint, string?) => string> = []) {
+    getCharacterRepresentation(room: IRoom, loc?: IPoint, layers: Array<MapLayer> = []) {
         let roomChar = room? GameMap.CHARMAP[room.constructor.name] : " ";
         return layers.reduce((char, func) => func(room, loc, char), roomChar);
     }
 
-    toString(layers: Array<(room, IPoint, string?) => string> = []) {
+    toVisual(layers: Array<MapLayer> = []) {
         return this.mapData.reduce((output, row, y) => {
-            return row.reduce((innerOutput, room, x): string => {
-                return innerOutput + this.getCharacterRepresentation(room, {x: x, y: y}, layers);
-            }, output + "\n");
-        }, "")
+                    return row.reduce((innerOutput, room, x): string => {
+                        return innerOutput + this.getCharacterRepresentation(room, {x: x, y: y}, layers);
+                    }, output + "\n");
+                }, "")
+    }
+
+    toString() {
+        return this.toVisual();
     }
 }
 
-export function BooleanMapFilter(filterMap: MapData<boolean>) {
+export function BooleanMapFilter(filterMap: MapData<boolean>): MapLayer {
     return function(room: IRoom, point: IPoint, char: string) {
         return filterMap[point.y] && filterMap[point.y][point.x]? char : " ";
+    }
+}
+
+export function PlayerFinderLayer(player: Avatar): MapLayer {
+    return function (room: IRoom, point: IPoint, char: string) {
+        return (point.x == player.room.coords.x && point.y == player.room.coords.y)? "P" : char;
     }
 }

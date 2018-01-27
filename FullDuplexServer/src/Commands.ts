@@ -3,7 +3,7 @@ import {Direction} from "./Direction";
 import {DoorRoom} from "./GameObjects/Rooms/DoorRoom";
 import {TextChannel} from "discord.js"
 import {GameManager} from "./GameManager";
-import {BooleanMapFilter} from "./GameMap";
+import {BooleanMapFilter, GameMap, PlayerFinderLayer} from "./GameMap";
 
 export class Commands {
     static ping: ICommand = (params, message, dataStore) => {
@@ -113,10 +113,47 @@ export class Commands {
         return true;
     };
 
+    static map: ICommand = (params, message, dataStore): boolean => {
+        let game = dataStore.playerGames[message.author.id];
+        if (!game) {
+            message.reply("You are not currently in a game.");
+            return;
+        }
+        if (!game.isRemotePlayer(message.author.id)) {
+            message.reply("This place.... it dizzies you, and throws off your sense of direction. Perhaps if you " +
+                "were to write it down, or ask your overseer?");
+            return;
+        }
+        let response = "Command Accepted: Accessing map database...\n" +
+                GameMap.MAPKEY + "\n" +
+                game.map.toString();
+        message.reply(response);
+    };
+
+    static find: ICommand = (params, message, dataStore): boolean => {
+        let game = dataStore.playerGames[message.author.id];
+        if (!game) {
+            message.reply("You are not currently in a game.");
+            return;
+        }
+        if (!game.isRemotePlayer(message.author.id)) {
+            message.reply("Try looking around, maybe you'll get lucky? Your overseer might know more though.");
+            return;
+        }
+        let response = "Command Accepted: Accessing map database...\n```" +
+            GameMap.MAPKEY + "\n" +
+            "P = Player" + "\n" +
+            game.map.toVisual([PlayerFinderLayer(game.avatar)]) +
+            "```";
+        message.reply(response);
+    };
+
+
+
     static debug: ICommand = (params, message, dataStore): boolean => {
         let game = new GameManager(dataStore).findGameInProgress(message.author.id);
         //console.log(game.map.mapData.map((line) => line.map((room) => {if (room) return "x"})));
-        console.log(game.map.toString([BooleanMapFilter([[true, true, true, true]])]));
+        console.log(game.map.toVisual([BooleanMapFilter([[true, true, true, true]])]));
         return true;
     };
 
