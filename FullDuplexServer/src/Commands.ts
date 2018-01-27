@@ -3,6 +3,7 @@ import {GameMap} from "./GameMap";
 import {Game} from "./Game";
 import {Direction} from "./Direction";
 import {DoorRoom} from "./GameObjects/Rooms/DoorRoom";
+import {TextChannel} from "discord.js"
 
 export class Commands {
     static ping: ICommand = (params, message, dataStore) => {
@@ -10,17 +11,18 @@ export class Commands {
         return true;
     };
 
-    static startgame: ICommand = (params, message, dataStore) => {
-        if(dataStore.playerGames[message.author.id]) {
+    static joingame: ICommand = (params, message, dataStore) => {
+        let game: Game = dataStore.playerGames[message.author.id];
+        if(game) {
             message.reply("There is already a game in progress. Do you wish to abandon it? Use ?quit");
             return;
         }
         let serializedMap = "xxxx\nddxd\nxxxx\nxxxx\ndddddddddddddddddddddddddddddddddddd";
         let map = GameMap.fromString(serializedMap);
 
-        let game = dataStore.playerGames[message.author.id] = new Game(map);
-        game.remotePlayer = message.author.id;
-        game.avatarPlayer = message.author.id;
+        game = dataStore.playerGames[message.author.id] = new Game(map);
+        game.remotePlayer = {user: message.author, channel: <TextChannel>message.channel, server: message.guild};
+        game.avatarPlayer = {user: message.author, channel: <TextChannel>message.channel, server: message.guild};
 
         message.reply("A new game has been started!")
         return true;
@@ -56,7 +58,7 @@ export class Commands {
             message.reply("You are not controlling a character, you are remotely accessing the site.");
             return;
         }
-        let direction = params[0];
+        let direction = params[0] || "";
         if(!direction || !(Direction[direction.toUpperCase()])) {
             message.reply("That is not a valid direction");
         }

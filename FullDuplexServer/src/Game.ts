@@ -1,10 +1,10 @@
 import {Avatar} from "./GameObjects/Avatar";
 import {GameMap} from "./GameMap";
-import {Snowflake} from "discord.js";
+import {Snowflake, User, TextChannel, Guild} from "discord.js";
 
 export class Game {
-    remotePlayer: Snowflake;
-    avatarPlayer: Snowflake;
+    remotePlayer: {user: User, channel: TextChannel, server: Guild};
+    avatarPlayer: {user: User, channel: TextChannel, server: Guild};
 
     avatar: Avatar;
     map: GameMap;
@@ -15,10 +15,10 @@ export class Game {
     }
 
     isAvatarPlayer(playerId: Snowflake): boolean {
-        return this.avatarPlayer == playerId;
+        return this.avatarPlayer.user.id == playerId;
     }
 
     isRemotePlayer(playerId: Snowflake): boolean {
-        return this.remotePlayer == playerId;
+        return this.remotePlayer.user.id == playerId;
     }
 }
