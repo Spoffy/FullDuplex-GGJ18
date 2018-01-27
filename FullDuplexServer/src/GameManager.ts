@@ -84,7 +84,9 @@ export class GameManager {
     }
 
     win(game: Game) {
-        game.avatarPlayer.channel.send("You did it!");
-        game.remotePlayer.channel.send("You did it!");
+        game.avatarPlayer.channel.send("Congratulations, you reached the exit and escape. Stay tuned for more levels," +
+            " or try the game from the other perspective!", {reply: game.avatarPlayer.user});
+        game.remotePlayer.channel.send("Congratulations, you reached the exit and escape. Stay tuned for more levels," +
+            " or try the game from the other perspective!", {reply: game.remotePlayer.user});
     }
 }
