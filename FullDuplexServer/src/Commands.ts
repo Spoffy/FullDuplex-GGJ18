@@ -14,7 +14,7 @@ export class Commands {
             message.reply("There is already a game in progress. Do you wish to abandon it? Use ?quit");
             return;
         }
-        let serializedMap = "xxxx\nxxxx\nxxxx\nxxxx";
+        let serializedMap = "xxxx\nddxd\nxxxx\nxxxx";
         let map = GameMap.fromString(serializedMap);
 
         let game = dataStore.playerGames[message.author.id] = new Game(map);
@@ -60,7 +60,7 @@ export class Commands {
             message.reply("That is not a valid direction");
         }
         game.avatar.move(Direction[direction.toUpperCase()]).then(() =>{
-               message.reply("You move " + direction + "into a new room. You are in " + game.avatar.room.description);
+               message.reply("You move " + direction + " into a new room. You are in " + game.avatar.room.description);
            }, (reason) => {
                message.reply("You try to move " + direction + ", but " + reason);
            });

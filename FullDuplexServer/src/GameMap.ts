@@ -1,6 +1,7 @@
 import {IRoom} from "./Interfaces/IRoom";
 import {EmptyRoom} from "./GameObjects/Rooms/EmptyRoom";
 import {IPoint} from "./Interfaces/IPoint";
+import {DoorRoom} from "./GameObjects/Rooms/DoorRoom";
 
 export class GameMap {
     private mapData: Array<Array<IRoom>>;
@@ -18,6 +19,9 @@ export class GameMap {
                     break;
                 case "x":
                     line.push(new EmptyRoom());
+                    break;
+                case "d":
+                    line.push(new DoorRoom());
                     break;
                 default:
                     throw new Error("Oh dear. That's not a valid character in the map.");
