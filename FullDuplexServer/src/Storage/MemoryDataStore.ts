@@ -2,9 +2,9 @@ import {Snowflake} from "discord.js";
 import {Game} from "../Game";
 
 export class MemoryDataStore {
-    public playerGames = {};
+    playerGames = {};
 
-    public getGame(playerId: Snowflake): Promise<Game> {
+    getGame(playerId: Snowflake): Promise<Game> {
         return new Promise<Game>((resolve, reject) => {
            let game = this.playerGames[playerId];
            if(game) {

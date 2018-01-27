@@ -1,10 +1,14 @@
 import {Avatar} from "./GameObjects/Avatar";
 import {GameMap} from "./GameMap";
 import {IRoom} from "./Interfaces/IRoom";
+import {Snowflake} from "discord.js";
 
 export class Game {
-    public avatar = new Avatar(this);
-    public map: GameMap;
+    overwatchPlayer: Snowflake;
+    avatarPlayer: Snowflake;
+
+    avatar = new Avatar(this);
+    map: GameMap;
 
     constructor(map: GameMap) {
         this.map = map;

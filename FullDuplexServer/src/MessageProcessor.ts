@@ -11,7 +11,7 @@ export class MessageProcessor {
         this.dataStore = dataStore;
     }
 
-    public processMessage(message: Discord.Message) {
+    processMessage(message: Discord.Message) {
         if(message.author.id == message.client.user.id) {
             //console.log("Not replying: This bot doesn't talk to itself.");
             return;

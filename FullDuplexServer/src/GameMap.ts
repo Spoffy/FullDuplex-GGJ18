@@ -5,7 +5,7 @@ import {IPoint} from "./Interfaces/IPoint";
 export class GameMap {
     private mapData: Array<Array<IRoom>>;
 
-    public static fromString(serializedMap: string) {
+    static fromString(serializedMap: string) {
         let map = new GameMap();
         map.mapData = [];
 
@@ -27,7 +27,7 @@ export class GameMap {
         return map;
     }
 
-    public getRoom(loc: IPoint) {
+    getRoom(loc: IPoint) {
         return this.mapData[loc.x][loc.y];
     }
 }
