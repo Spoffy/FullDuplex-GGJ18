@@ -7,4 +7,8 @@ export class BaseRoom implements IRoom {
     east: IRoom;
     south: IRoom;
     west: IRoom;
+
+    isAccessible = true;
+    static defaultInaccessibleReason = "there's a wall in the way";
+    inaccessibleReason = "there's a wall in the way";
 }

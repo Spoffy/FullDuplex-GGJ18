@@ -1,6 +1,5 @@
 import {Avatar} from "./GameObjects/Avatar";
 import {GameMap} from "./GameMap";
-import {IRoom} from "./Interfaces/IRoom";
 import {Snowflake} from "discord.js";
 
 export class Game {

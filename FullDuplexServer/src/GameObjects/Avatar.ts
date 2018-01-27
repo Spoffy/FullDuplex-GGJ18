@@ -1,6 +1,7 @@
 import {Game} from "../Game";
 import {IRoom} from "../Interfaces/IRoom";
 import {Direction} from "../Direction";
+import {BaseRoom} from "./Rooms/BaseRoom";
 
 export class Avatar {
     game: Game;
@@ -12,6 +13,15 @@ export class Avatar {
     };
 
     move(dir: Direction): Promise<void> {
-        return Promise.reject("There's a wall there.");
+        let nextRoom = this.room[dir];
+
+        if(!nextRoom) {
+            return Promise.reject(BaseRoom.defaultInaccessibleReason);
+        } else if(!nextRoom.isAccessible) {
+            return Promise.reject(nextRoom.inaccessibleReason);
+        }
+
+        this.room = nextRoom;
+        return Promise.resolve();
     }
 }

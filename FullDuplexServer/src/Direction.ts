@@ -1,6 +1,6 @@
 export enum Direction {
-    NORTH = "NORTH",
-    EAST = "EAST",
-    SOUTH = "SOUTH",
-    WEST = "WEST"
+    NORTH = "north",
+    EAST = "east",
+    SOUTH = "south",
+    WEST = "west"
 }
