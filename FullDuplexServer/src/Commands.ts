@@ -183,12 +183,13 @@ export class Commands {
         let game = new GameManager(dataStore).findGameInProgress(message.author.id);
         //console.log(game.map.mapData.map((line) => line.map((room) => {if (room) return "x"})));
         //game.revealArea({x: 1, y: 1}, 1);
-        //console.log(game.knownMap);
+        console.log(game.knownMap);
         //message.reply("Hello world", {embed: {title: "Hello", description: "World", color: 0x40c41b, fields: [{name:"__Fish__", value:"Herring", inline: false}, {name:"3", value:"3"}]}});
 
-        console.log(game.avatar.transmitterRooms);
-        console.log(game.avatar.transmitterCount);
-        console.log(game.avatar.room.transmitter);
+        //console.log(game.avatar.transmitterRooms);
+        //console.log(game.avatar.transmitterCount);
+        //console.log(game.avatar.room.transmitter);
+        //console.log(game.transmitterPower);
         return true;
     };
 

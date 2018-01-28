@@ -55,6 +55,8 @@ export class Avatar {
         this.room.transmitter = true;
         this.transmitterRooms.push(this.room);
         this.transmitterCount -= 1;
+
+        this.game.revealArea(this.room.coords, this.game.transmitterPower);
         return true;
     }
 

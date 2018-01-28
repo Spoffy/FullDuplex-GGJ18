@@ -1,8 +1,7 @@
 import {Avatar} from "./GameObjects/Avatar";
 import {GameMap} from "./GameMap";
-import {Snowflake, User, TextChannel, Guild} from "discord.js";
+import {Guild, Snowflake, TextChannel, User} from "discord.js";
 import {IPoint} from "./Interfaces/IPoint";
-import {Transmitter} from "./GameObjects/Transmitter";
 
 export class Game {
     remotePlayer: {user: User, channel: TextChannel, server: Guild};
@@ -11,6 +10,8 @@ export class Game {
     avatar: Avatar;
     knownMap: Array<Array<boolean>> = [];
     map: GameMap;
+
+    transmitterPower = 3;
 
     constructor(map: GameMap) {
         this.map = map;
@@ -28,7 +29,7 @@ export class Game {
     revealArea(center: IPoint, radius: number) {
         for(let y = center.y - radius; y <= center.y + radius; y++) {
             for(let x = center.x - radius; x <= center.x + radius; x++) {
-                let row = this.knownMap[y] || []
+                let row = this.knownMap[y] || [];
                 row[x] = true;
                 this.knownMap[y] = row;
             }
