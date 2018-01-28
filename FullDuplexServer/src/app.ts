@@ -21,7 +21,8 @@ client.on("message", (message: Message) => {
                 user.send("The server has encountered an exception and needs to be restarted. Apologies for the inconvinience",
                           {reply: user});
             })
-        })
+        });
+        dataStore.playerGames = {};
     }
 });
 
