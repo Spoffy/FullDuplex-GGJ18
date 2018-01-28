@@ -9,3 +9,9 @@ export function inSquareRange(a: IPoint, b:IPoint, range: number) {
     let yDiff = Math.abs(a.y - b.y);
     return xDiff <= range && yDiff <= range;
 }
+
+export function isAdjacent(a: IPoint, b: IPoint) {
+    let xDiff = Math.abs(a.x - b.x);
+    let yDiff = Math.abs(a.y - b.y);
+    return (xDiff <= 1 && yDiff == 0) || (xDiff == 0 && yDiff <= 1);
+}

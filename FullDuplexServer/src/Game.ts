@@ -3,10 +3,11 @@ import {GameMap} from "./GameMap";
 import {Guild, Snowflake, TextChannel, User} from "discord.js";
 import {IPoint} from "./Interfaces/IPoint";
 import {inSquareRange} from "./Helpers/PointHelpers";
+import {IUser} from "./Interfaces/IUser";
 
 export class Game {
-    remotePlayer: {user: User, channel: TextChannel, server: Guild};
-    avatarPlayer: {user: User, channel: TextChannel, server: Guild};
+    remotePlayer: IUser;
+    avatarPlayer: IUser;
 
     avatar: Avatar;
     knownMap: Array<Array<boolean>> = [];
@@ -25,6 +26,15 @@ export class Game {
 
     isRemotePlayer(playerId: Snowflake): boolean {
         return this.remotePlayer && this.remotePlayer.user.id == playerId;
+    }
+
+    getUser(playerId: Snowflake): IUser {
+        if(this.isAvatarPlayer(playerId)) {
+            return this.avatarPlayer;
+        }
+        if(this.isRemotePlayer(playerId)) {
+            return this.remotePlayer;
+        }
     }
 
     revealArea(center: IPoint, radius: number) {

@@ -25,8 +25,8 @@ export class GameManager {
     joinOpenGame(openGame: Game, playerToJoin: IUser) {
         //Joining messages
         let otherPlayer = openGame.remotePlayer || openGame.avatarPlayer;
-        otherPlayer.channel.send("You have been joined by: " + playerToJoin.user.tag, {reply: otherPlayer.user});
-        playerToJoin.channel.send("You have joined a game with: " + otherPlayer.user.tag, {reply: playerToJoin.user});
+        otherPlayer.send("You have been joined by: " + playerToJoin.user.tag);
+        playerToJoin.send("You have joined a game with: " + otherPlayer.user.tag);
 
         //Role assignment
         let roleDesc = "";
@@ -37,8 +37,7 @@ export class GameManager {
             openGame.remotePlayer = playerToJoin;
             roleDesc = "You are acting as remote overseer. Help the wanderer reach the end of the maze.";
         }
-        playerToJoin.channel.send(roleDesc
-            , {reply: playerToJoin.user});
+        playerToJoin.send(roleDesc);
 
         this.dataStore.playerGames[playerToJoin.user.id] = openGame;
         return;
@@ -61,9 +60,8 @@ export class GameManager {
         newGame.remotePlayer = playerToJoin;
         newGame.avatarPlayer = playerToJoin;
 
-        playerToJoin.channel.send("A new game has been started! Wait for someone to join." +
-            "\nYou are acting as remote overwatch. Help the wanderer reach the end of the maze.",
-            {reply: playerToJoin.user});
+        playerToJoin.send("A new game has been started! Wait for someone to join." +
+            "\nYou are acting as remote overwatch. Help the wanderer reach the end of the maze.");
 
         return newGame;
     }
@@ -75,15 +73,15 @@ export class GameManager {
         delete this.dataStore.playerGames[player.user.id];
         if(otherPlayer) {
             delete this.dataStore.playerGames[otherPlayer.user.id];
-            otherPlayer.channel.send("The other player has left the game, so the game jhas exited.", {reply: otherPlayer.user});
+            otherPlayer.send("The other player has left the game, so the game jhas exited.");
         }
-        player.channel.send("You have left the game, and are free to join another game.");
+        player.send("You have left the game, and are free to join another game.");
     }
 
     win(game: Game) {
-        game.avatarPlayer.channel.send("Congratulations, you reached the exit and escaped. Stay tuned for more levels," +
-            " or try the game from the other perspective!", {reply: game.avatarPlayer.user});
-        game.remotePlayer.channel.send("Congratulations, you reached the exit and escaped. Stay tuned for more levels," +
-            " or try the game from the other perspective!", {reply: game.remotePlayer.user});
+        game.avatarPlayer.send("Congratulations, you reached the exit and escaped. Stay tuned for more levels," +
+            " or try the game from the other perspective!");
+        game.remotePlayer.send("Congratulations, you reached the exit and escaped. Stay tuned for more levels," +
+            " or try the game from the other perspective!");
     }
 }
