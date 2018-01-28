@@ -1,5 +1,6 @@
 import {IRoom} from "../../Interfaces/IRoom";
 import {IPoint} from "../../Interfaces/IPoint";
+import {stripNewlines} from "../../Helpers/TextHelpers";
 
 export class BaseRoom implements IRoom {
     baseDescription = "a stretch of empty corridor, with black and purple tiled walls. They remind you of a debugging texture.";
@@ -17,18 +18,22 @@ export class BaseRoom implements IRoom {
     transmitter = false;
 
     get description(): string {
-        return this.baseDescription;
+        return this.baseDescription + this.transmitterText;
     }
 
     set description(newDescription: string) {
         this.baseDescription = newDescription;
     }
 
+    get transmitterText(): string {
+        return this.transmitter? "\n\nA small transmitter is mounted to the wall here." : "";
+    }
+
     get exitText(): string {
-        return "There are exits to the:\n"
-            + (this.north? `- North: ${this.north.description}\n` : "")
-            + (this.east? `- East: ${this.east.description}\n` : "")
-            + (this.south? `- South: ${this.south.description}\n` : "")
-            + (this.west? `- West: ${this.west.description}\n` : "");
+        return "There are exits to the:\n\n"
+            + (this.north? `**North**:  \`${stripNewlines(this.north.description)}\`\n` : "")
+            + (this.east? `**East**:  \`${stripNewlines(this.east.description)}\n\`` : "")
+            + (this.south? `**South**:  \`${stripNewlines(this.south.description)}\`\n` : "")
+            + (this.west? `**West**:  \`${stripNewlines(this.west.description)}\`\n` : "");
     }
 }
