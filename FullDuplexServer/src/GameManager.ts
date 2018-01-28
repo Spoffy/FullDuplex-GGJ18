@@ -85,4 +85,12 @@ export class GameManager {
         player.send("You have left the game, and are free to join another game.");
         return true;
     }
+
+    endGame(game: Game) {
+        let player1 = game.avatarPlayer;
+        let player2 = game.remotePlayer;
+
+        delete this.dataStore.playerGames[player1.user.id];
+        delete this.dataStore.playerGames[player2.user.id];
+    }
 }

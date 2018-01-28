@@ -21,7 +21,7 @@ export class BaseRoom implements IRoom {
     monsters = new Set<IMonster>();
 
     get description(): string {
-        return this.baseDescription + this.transmitterText;
+        return this.baseDescription + this.monsterText + this.transmitterText;
     }
 
     set description(newDescription: string) {
@@ -30,6 +30,12 @@ export class BaseRoom implements IRoom {
 
     get adjacentRooms(): Array<IRoom> {
         return [this.north, this.east, this.south, this.west].filter((room: IRoom) => room);
+    }
+
+    get monsterText(): string {
+        return Array.from(this.monsters.values()).reduce((description, monster: IMonster) => {
+            return description + "You see " + monster.description + "\n";
+        }, "\n\n");
     }
 
     get transmitterText(): string {

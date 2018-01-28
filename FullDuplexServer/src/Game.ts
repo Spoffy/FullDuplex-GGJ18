@@ -92,5 +92,6 @@ export class Game implements ITickable {
     playerDeath() {
         this.avatarPlayer.send("Yeah.... you died. Gruesomely, with only your overseer for company. What a waste.");
         this.remotePlayer.send("The wanderer died in the maze, despite your efforts. Oh well, what's another body?");
+        this.gameManager.endGame(this);
     }
 }

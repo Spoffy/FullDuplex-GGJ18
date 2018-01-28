@@ -8,6 +8,7 @@ export class BaseMonster implements IMonster {
 
     angerSpeed = 5;
 
+    description = "a large, angry werewolf";
     creatureAngeringMessage = "The creature growls and fixes you with hungering eyes.";
     creatureKillingMessage = "The creature swipes at you with barbed claws. After a flash of pain - nothing.";
 
@@ -56,6 +57,7 @@ export class BaseMonster implements IMonster {
             }
         } else {
             this.state = "wandering";
+            this.angered = false;
         }
     }
 
