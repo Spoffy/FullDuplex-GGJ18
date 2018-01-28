@@ -8,7 +8,7 @@ export class BaseMonster implements IMonster {
 
     angerSpeed = 5;
 
-    description = "a deformed, rotting human with long, spiderlike limbs and chittering mandibles.";
+    description = "a deformed, rotting human with long, spiderlike limbs and chittering mandibles";
     creatureAngeringMessage = "The creature growls and fixes you with hungering eyes.";
     creatureKillingMessage = "The creature coils its iron legs around you, as the mandibles close in around your throat.";
 
@@ -33,6 +33,7 @@ export class BaseMonster implements IMonster {
 
         //Remove angering to prevent insta-kills.
         this.angered = false;
+        this.game.localMessage(this.room.coords,this.description + " skitters into the room, eyeing you hungrily");
         return true;
     }
 
@@ -46,16 +47,17 @@ export class BaseMonster implements IMonster {
                 break;
             case "wandering":
                 this.performWandering();
+                this.attemptChase()
                 break;
             case "chase":
                 this.performChase();
+                this.attemptChase()
                 break;
             default:
                 this.chooseBehaviour();
+                this.attemptChase()
                 break;
         }
-
-        this.attemptChase();
     }
 
     attemptChase() {
