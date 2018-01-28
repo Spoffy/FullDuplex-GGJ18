@@ -56,6 +56,11 @@ export class GameMap {
             }
         }
 
+        //Push any lingering map data to the map.
+        if(line.length > 0) {
+            map.mapData.push(line);
+        }
+
         map.connect();
         return map;
     }

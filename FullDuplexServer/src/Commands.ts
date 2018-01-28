@@ -6,6 +6,7 @@ import {GameManager} from "./GameManager";
 import {BooleanMapFilter, GameMap, PlayerFinderLayer} from "./GameMap";
 import {packetizeAndSend} from "./Helpers/DiscordHelpers";
 import {LoadMap} from "./MapLoader";
+import {HelpMessages} from "./HelpMessages";
 
 export class Commands {
     static ping: ICommand = (params, message, dataStore) => {
@@ -236,6 +237,15 @@ export class Commands {
         if(game.avatar.room.constructor.name.toString() == "ExitRoom") {
             gameManager.win(game);
         }
+        return true;
+    };
+
+    static help: ICommand = (params, message, dataStore): boolean => {
+        let helpText = HelpMessages.INTRO +
+                       HelpMessages.GENERAL_COMMANDS +
+                       HelpMessages.OVERSEER_COMMANDS +
+                       HelpMessages.WANDERER_COMMANDS;
+        packetizeAndSend(helpText, message.reply.bind(message));
         return true;
     }
 }
