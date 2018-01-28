@@ -30,6 +30,9 @@ export class BaseMonster implements IMonster {
         this.room.monsters.delete(this);
         this.room = room;
         this.room.monsters.add(this);
+
+        //Remove angering to prevent insta-kills.
+        this.angered = false;
         return true;
     }
 
@@ -52,7 +55,6 @@ export class BaseMonster implements IMonster {
                 break;
         }
 
-        this.angered = false;
         this.attemptChase();
     }
 
