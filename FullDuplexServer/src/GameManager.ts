@@ -3,6 +3,7 @@ import {Snowflake, User, TextChannel} from "discord.js";
 import {Game} from "./Game";
 import {IUser} from "./Interfaces/IUser";
 import {GameMap} from "./GameMap";
+import {LoadMap} from "./MapLoader";
 
 export class GameManager {
     private dataStore: MemoryDataStore;
@@ -53,11 +54,7 @@ export class GameManager {
 
     createNewGame(playerToJoin: IUser): Game {
         //Create a new game, if none is available.
-        let serializedMap = "xxdE\n" +
-                            "  x \n" +
-                            "xxd \n" +
-                            "xx x\n" +
-                            "dxxddddddddddddddddddddddddddddddddd\n";
+        let serializedMap = LoadMap("test");
         let map = GameMap.fromString(serializedMap);
 
         let newGame = this.dataStore.playerGames[playerToJoin.user.id] = new Game(map);
