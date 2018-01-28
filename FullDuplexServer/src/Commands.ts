@@ -88,7 +88,7 @@ export class Commands {
             return;
         }
         message.reply(game.map.doors.reduce((content: string, door: DoorRoom) => {
-           return content + `Door: ${door.name} - __Status__: ` + (door.isAccessible? "**OPEN**" : "**CLOSED**") + "\n";
+           return content + `Door: **${door.name}** - __Status__: ` + (door.isAccessible? "*OPEN*" : "**CLOSED**") + "\n";
         }, "Command Accepted:\n"));
         return true;
     };
@@ -104,7 +104,7 @@ export class Commands {
             return;
         }
         let name = params[0] || "";
-        let door = game.map.doors.find((door) => door.name == name);
+        let door = game.map.doors.find((door) => door.name.toLowerCase() == name.toLowerCase());
         if(door) {
             door.isAccessible = true;
             message.reply("Command Accepted: Opening door " + door.name);
