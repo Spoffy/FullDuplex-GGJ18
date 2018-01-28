@@ -8,6 +8,7 @@ import {packetizeAndSend} from "./Helpers/DiscordHelpers";
 import {LoadMap} from "./MapLoader";
 import {HelpMessages} from "./HelpMessages";
 import {GameUser} from "./GameUser";
+import {BaseMonster} from "./GameObjects/Monsters/BaseMonster";
 
 export class Commands {
     static ping: ICommand = (params, message, dataStore) => {
@@ -210,26 +211,6 @@ export class Commands {
         let game = dataStore.playerGames[message.author.id];
 
         if (!game) {
-            GameUser.reply(message, "You are not currently in a game.");
-            return;
-        }
-
-        let player = game.getUser(message.author.id);
-        if (!game.isRemotePlayer(message.author.id)) {
-            player.send("This place.... it dizzies you, and throws off your sense of direction. Perhaps if you " +
-                "were to write it down, or ask your overseer?");
-            return;
-        }
-        let response = "Command Accepted: Accessing map database...\n```" +
-                GameMap.MAPKEY + "\n" +
-                game.map.toVisual([BooleanMapFilter(game.knownMap)]) + "```";
-        player.send(response);
-    };
-
-    static find: ICommand = (params, message, dataStore): boolean => {
-        let game = dataStore.playerGames[message.author.id];
-
-        if (!game) {
             GameUser.reply(message,"You are not currently in a game.");
             return;
         }
@@ -260,8 +241,9 @@ export class Commands {
         //console.log(game.transmitterPower);
         //console.log(LoadMap("simple"));
         //console.log(game.avatar.room.adjacentRooms);
-        throw new Error("Test Error");
-        //return true;
+        //throw new Error("Test Error");
+        game.monsters.forEach((monster) => {console.log((<BaseMonster>monster).state);})
+        return true;
     };
 
     static exit: ICommand = (params, message, dataStore): boolean => {

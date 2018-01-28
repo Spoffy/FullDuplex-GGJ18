@@ -66,6 +66,13 @@ export class Game implements ITickable {
         return Promise.reject("Avatar is not nearby");
     }
 
+    sameRoomMessage(location: IPoint, message: string): Promise<Message|Array<Message>> {
+        if(location == this.avatar.room.coords) {
+            return this.avatarPlayer.send(message);
+        }
+        return Promise.reject("Avatar is not in the same square.");
+    }
+
     revealArea(center: IPoint, radius: number) {
         for(let y = center.y - radius; y <= center.y + radius; y++) {
             for(let x = center.x - radius; x <= center.x + radius; x++) {

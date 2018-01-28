@@ -1,6 +1,7 @@
 import {IMonster} from "../../Interfaces/IMonster";
 import {IRoom} from "../../Interfaces/IRoom";
 import {Game} from "../../Game";
+import {Direction, oppositeDirection} from "../../Direction";
 
 export class BaseMonster implements IMonster {
     room: IRoom;
@@ -13,7 +14,8 @@ export class BaseMonster implements IMonster {
     creatureKillingMessage = "The creature coils its iron legs around you, as the mandibles close in around your throat.";
 
     protected angered = false;
-    protected state = "";
+    public state = "";
+    public savedState = "";
     protected counter = 0;
     protected counterTarget = 0;
     protected heading = null;
@@ -33,7 +35,15 @@ export class BaseMonster implements IMonster {
 
         //Remove angering to prevent insta-kills.
         this.angered = false;
-        this.game.localMessage(this.room.coords,this.description + " skitters into the room, eyeing you hungrily");
+        let heading = this.searchForAvatar();
+        if(heading) {
+            this.game.avatarPlayer.send(this.description + " shuffles around off to the " + oppositeDirection(heading.dir));
+        }
+        this.game.sameRoomMessage(this.room.coords,this.description + " skitters into the room, eyeing you hungrily")
+            .catch(() => {
+                this.game.localMessage(this.room.coords, this.description + " moves around in an adjacent room");
+            });
+
         return true;
     }
 
@@ -47,15 +57,15 @@ export class BaseMonster implements IMonster {
                 break;
             case "wandering":
                 this.performWandering();
-                this.attemptChase()
+                this.attemptChase();
                 break;
             case "chase":
                 this.performChase();
-                this.attemptChase()
+                this.attemptChase();
                 break;
             default:
                 this.chooseBehaviour();
-                this.attemptChase()
+                this.attemptChase();
                 break;
         }
     }
@@ -66,6 +76,7 @@ export class BaseMonster implements IMonster {
             this.state = "chase";
             this.heading = heading;
         }
+        this.setWait(1);
     }
 
     performChase() {
@@ -75,50 +86,51 @@ export class BaseMonster implements IMonster {
         }
         this.moveToRoom(this.room[this.heading.dir]);
         this.heading.dist -= 1;
+        this.setWait(2);
     }
 
     searchForAvatar() {
         let room: IRoom = this.room;
         let dist = 0;
 
-        while(room.north) {
+        while(room.north && room.north.isAccessible) {
             room = room.north;
             dist += 1;
             if(this.game.avatar.room == room) {
-                return {dir: "north", dist: dist};
+                return {dir: Direction.NORTH, dist: dist};
             }
         }
 
         room = this.room;
         dist = 0;
 
-        while(room.east) {
+        while(room.east && room.east.isAccessible) {
             room = room.east;
             dist += 1;
             if(this.game.avatar.room == room) {
-                return {dir: "east", dist: dist};
+                return {dir: Direction.EAST, dist: dist};
             }
         }
 
         room = this.room;
         dist = 0;
 
-        while(room.south) {
+        while(room.south && room.south.isAccessible) {
             room = room.south;
             dist += 1;
             if(this.game.avatar.room == room) {
-                return {dir: "south", dist: dist};
+                return {dir: Direction.SOUTH, dist: dist};
             }
         }
 
         room = this.room;
         dist = 0;
 
-        while(room.west) {
+        while(room.west && room.west.isAccessible) {
             room = room.west;
             dist += 1;
             if(this.game.avatar.room == room) {
-                return {dir: "west", dist: dist};
+                return {dir: Direction.WEST, dist: dist};
             }
         }
     }
@@ -143,19 +155,29 @@ export class BaseMonster implements IMonster {
     }
 
     performAngering() {
+        if(this.angered) {
+            this.state = "";
+            return;
+        }
         this.state = "sendWait";
         this.game.localMessage(this.room.coords, this.creatureAngeringMessage).then(() => {
             this.angered = true;
-            this.state = "wait";
-            this.counterTarget = 2;
+            this.setWait(3);
         });
+    }
+
+    setWait(time: number) {
+        this.counterTarget = time;
+        this.counter = 0;
+        this.savedState = this.state;
+        this.state = "wait";
     }
 
     performWait() {
         this.counter += 1;
         if(this.counter >= this.counterTarget) {
             this.counter = 0;
-            this.state = "";
+            this.state = this.savedState == "wait" || this.savedState == "sendWait"? "" : this.savedState;
         }
     }
 
