@@ -62,7 +62,7 @@ export class GameManager {
 
         let newGame = this.dataStore.playerGames[playerToJoin.user.id] = new Game(map, this);
         newGame.remotePlayer = playerToJoin;
-        newGame.avatarPlayer = playerToJoin;
+        //newGame.avatarPlayer = playerToJoin;
 
         playerToJoin.send("A new game has been started! Wait for someone to join." +
             "\nYou are acting as remote overwatch. Help the wanderer reach the end of the maze.");

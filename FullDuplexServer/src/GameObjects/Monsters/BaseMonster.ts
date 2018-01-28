@@ -76,7 +76,7 @@ export class BaseMonster implements IMonster {
             this.state = "chase";
             this.heading = heading;
         }
-        this.setWait(2);
+        this.setWait(4);
     }
 
     performChase() {
@@ -86,7 +86,7 @@ export class BaseMonster implements IMonster {
         }
         this.moveToRoom(this.room[this.heading.dir]);
         this.heading.dist -= 1;
-        this.setWait(3);
+        this.setWait(4);
     }
 
     searchForAvatar() {
@@ -162,7 +162,7 @@ export class BaseMonster implements IMonster {
         this.state = "sendWait";
         this.game.localMessage(this.room.coords, this.creatureAngeringMessage).then(() => {
             this.angered = true;
-            this.setWait(3);
+            this.setWait(5);
         });
     }
 
