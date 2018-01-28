@@ -77,6 +77,36 @@ export class Commands {
     static s: ICommand = (params, message, dataStore) => Commands.move(["south"], message, dataStore);
     static w: ICommand = (params, message, dataStore) => Commands.move(["west"], message, dataStore);
 
+    static transmitter: ICommand = (params, message, dataStore): boolean => {
+        let game = new GameManager(dataStore).findGameInProgress(message.author.id);
+        if(!game) {
+            message.reply("You are not currently in a game.");
+            return;
+        }
+        if(!game.isAvatarPlayer(message.author.id)) {
+            message.reply("You wish really, really hard that the wanderer would place a transmitter. Sadly, they're not telepathic.");
+            return;
+        }
+        game.avatar.toggleTransmitter().then((operation) => {
+            if(operation == "set") {
+                message.reply("You set the transmitter on the wall, where it's green light begins to flash softly.")
+            } else {
+                message.reply("You pick up the transmitter and clip it to the waistband of your trousers.")
+            }
+        }, (operation) => {
+            if(operation == "set") {
+                if(game.avatar.transmitterCount <= 0) {
+                    message.reply("You don't have any transmitters left to place.")
+                } else {
+                    message.reply("There's already a transmitter here. Placing a new one would cause interference.");
+                }
+            } else {
+                message.reply("There's no transmitter here to get.");
+            }
+        });
+        return true;
+    };
+
     static doors: ICommand = (params, message, dataStore): boolean => {
         let game = dataStore.playerGames[message.author.id];
         if(!game) {
@@ -149,13 +179,16 @@ export class Commands {
         message.reply(response);
     };
 
-
-
     static debug: ICommand = (params, message, dataStore): boolean => {
         let game = new GameManager(dataStore).findGameInProgress(message.author.id);
         //console.log(game.map.mapData.map((line) => line.map((room) => {if (room) return "x"})));
-        game.revealArea({x: 1, y: 1}, 1);
-        console.log(game.knownMap);
+        //game.revealArea({x: 1, y: 1}, 1);
+        //console.log(game.knownMap);
+        //message.reply("Hello world", {embed: {title: "Hello", description: "World", color: 0x40c41b, fields: [{name:"__Fish__", value:"Herring", inline: false}, {name:"3", value:"3"}]}});
+
+        console.log(game.avatar.transmitterRooms);
+        console.log(game.avatar.transmitterCount);
+        console.log(game.avatar.room.transmitter);
         return true;
     };
 

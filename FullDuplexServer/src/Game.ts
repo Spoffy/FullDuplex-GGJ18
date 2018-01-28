@@ -2,6 +2,7 @@ import {Avatar} from "./GameObjects/Avatar";
 import {GameMap} from "./GameMap";
 import {Snowflake, User, TextChannel, Guild} from "discord.js";
 import {IPoint} from "./Interfaces/IPoint";
+import {Transmitter} from "./GameObjects/Transmitter";
 
 export class Game {
     remotePlayer: {user: User, channel: TextChannel, server: Guild};

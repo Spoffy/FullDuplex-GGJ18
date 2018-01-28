@@ -12,5 +12,7 @@ export interface IRoom {
     isAccessible: boolean;
     inaccessibleReason: string;
 
+    transmitter: boolean;
+
     exitText: string;
 }

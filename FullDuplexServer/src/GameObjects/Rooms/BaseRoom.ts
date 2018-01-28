@@ -14,6 +14,8 @@ export class BaseRoom implements IRoom {
     static defaultInaccessibleReason = "there's a wall in the way";
     inaccessibleReason = "there's a wall in the way";
 
+    transmitter = false;
+
     get description(): string {
         return this.baseDescription;
     }
