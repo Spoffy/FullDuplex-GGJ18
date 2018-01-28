@@ -13,12 +13,6 @@ export class GameMap {
     public mapData: MapData<IRoom>;
     public doors: Array<DoorRoom>;
 
-    static CHARMAP = {
-        "DoorRoom": "d",
-        "EmptyRoom": "x",
-        "ExitRoom": "E"
-    };
-
     static MAPKEY = "E = The Exit  |  d = Door  | x = Corridor";
 
     private constructor() {};
@@ -89,7 +83,7 @@ export class GameMap {
     }
 
     getCharacterRepresentation(room: IRoom, loc?: IPoint, layers: Array<MapLayer> = []) {
-        let roomChar = room? GameMap.CHARMAP[room.constructor.name] : " ";
+        let roomChar = room? room.mapCharacter : " ";
         return layers.reduce((char, func) => func(room, loc, char), roomChar);
     }
 

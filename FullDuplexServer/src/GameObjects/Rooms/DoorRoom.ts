@@ -2,6 +2,7 @@ import {BaseRoom} from "./BaseRoom";
 
 export class DoorRoom extends BaseRoom {
     baseDescription = "a short stretch of metal-walled corridor";
+    mapCharacter = "d";
 
     name: string;
     isAccessible = false;

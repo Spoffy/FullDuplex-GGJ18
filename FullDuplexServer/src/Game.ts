@@ -22,7 +22,7 @@ export class Game implements ITickable {
     }
 
     tick() {
-        
+
     }
 
     isAvatarPlayer(playerId: Snowflake): boolean {

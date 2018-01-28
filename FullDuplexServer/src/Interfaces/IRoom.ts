@@ -3,6 +3,7 @@ import {IPoint} from "./IPoint";
 export interface IRoom {
     description: string;
     coords: IPoint;
+    mapCharacter: string;
 
     north: IRoom;
     east: IRoom;

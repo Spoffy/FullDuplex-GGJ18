@@ -5,6 +5,7 @@ import {stripNewlines} from "../../Helpers/TextHelpers";
 export class BaseRoom implements IRoom {
     baseDescription = "a stretch of empty corridor, with black and purple tiled walls. They remind you of a debugging texture.";
     coords: IPoint;
+    mapCharacter = "x";
 
     north: IRoom;
     east: IRoom;
