@@ -12,9 +12,8 @@ export class GameUser implements IUser {
         this.server = server;
     }
 
-    send(message: string): boolean {
-        this.channel.send(message, {reply: this.user}).catch(console.error);
-        return true;
+    send(message: string): Promise<Message|Array<Message>> {
+        return this.channel.send(message, {reply: this.user});
     }
 
     static reply(originalMessage: Message, messageToSend: string): boolean {

@@ -1,6 +1,7 @@
 import {IRoom} from "../../Interfaces/IRoom";
 import {IPoint} from "../../Interfaces/IPoint";
 import {stripNewlines} from "../../Helpers/TextHelpers";
+import {IMonster} from "../../Interfaces/IMonster";
 
 export class BaseRoom implements IRoom {
     baseDescription = "a stretch of empty corridor, with black and purple tiled walls. They remind you of a debugging texture.";
@@ -17,6 +18,7 @@ export class BaseRoom implements IRoom {
     inaccessibleReason = "there's a wall in the way";
 
     transmitter = false;
+    monsters = new Set<IMonster>();
 
     get description(): string {
         return this.baseDescription + this.transmitterText;
@@ -24,6 +26,10 @@ export class BaseRoom implements IRoom {
 
     set description(newDescription: string) {
         this.baseDescription = newDescription;
+    }
+
+    get adjacentRooms(): Array<IRoom> {
+        return [this.north, this.east, this.south, this.west].filter((room: IRoom) => room);
     }
 
     get transmitterText(): string {

@@ -258,7 +258,8 @@ export class Commands {
         //console.log(game.avatar.transmitterCount);
         //console.log(game.avatar.room.transmitter);
         //console.log(game.transmitterPower);
-        console.log(LoadMap("simple"));
+        //console.log(LoadMap("simple"));
+        //console.log(game.avatar.room.adjacentRooms);
         return true;
     };
 
@@ -266,7 +267,7 @@ export class Commands {
         let gameManager = new GameManager(dataStore);
         let game = gameManager.findGameInProgress(message.author.id);
         if(game && game.avatar.room.constructor.name.toString() == "ExitRoom") {
-            gameManager.win(game);
+            game.exitReached();
         }
         return true;
     };

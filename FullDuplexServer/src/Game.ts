@@ -1,12 +1,13 @@
 import {Avatar} from "./GameObjects/Avatar";
 import {GameMap} from "./GameMap";
-import {Guild, Snowflake, TextChannel, User} from "discord.js";
+import {Guild, Snowflake, TextChannel, User, Message} from "discord.js";
 import {IPoint} from "./Interfaces/IPoint";
 import {inSquareRange, isAdjacent} from "./Helpers/PointHelpers";
 import {IUser} from "./Interfaces/IUser";
 import {ITickable} from "./Interfaces/ITickable";
 import {IMonster} from "./Interfaces/IMonster";
 import {BaseMonster} from "./GameObjects/Monsters/BaseMonster";
+import {GameManager} from "./GameManager";
 
 export class Game implements ITickable {
     remotePlayer: IUser;
@@ -16,12 +17,15 @@ export class Game implements ITickable {
     knownMap: Array<Array<boolean>> = [];
     map: GameMap;
 
+    gameManager: GameManager;
+
     transmitterPower = 3;
 
     monsters: Array<IMonster> = [];
 
-    constructor(map: GameMap) {
+    constructor(map: GameMap, gameManager: GameManager) {
         this.map = map;
+        this.gameManager = gameManager;
         this.avatar = new Avatar(this, this.map.getRoom({x: 0, y: 0}));
         this.spawnMonsters();
     }
@@ -55,11 +59,11 @@ export class Game implements ITickable {
         }
     }
 
-    localMessage(location: IPoint, message: string): boolean {
+    localMessage(location: IPoint, message: string): Promise<Message|Array<Message>> {
         if(isAdjacent(location, this.avatar.room.coords)) {
             return this.avatarPlayer.send(message);
         }
-        return false;
+        return Promise.reject("Avatar is not nearby");
     }
 
     revealArea(center: IPoint, radius: number) {
@@ -76,5 +80,17 @@ export class Game implements ITickable {
         return this.avatar.transmitterRooms.some((room) => {
             return inSquareRange(room.coords, loc, this.transmitterPower);
         })
+    }
+
+    exitReached() {
+        this.avatarPlayer.send("Congratulations, you reached the exit and escaped. Stay tuned for more levels," +
+            " or try the game from the other perspective!");
+        this.remotePlayer.send("Congratulations, you reached the exit and escaped. Stay tuned for more levels," +
+            " or try the game from the other perspective!");
+    }
+
+    playerDeath() {
+        this.avatarPlayer.send("Yeah.... you died. Gruesomely, with only your overseer for company. What a waste.");
+        this.remotePlayer.send("The wanderer died in the maze, despite your efforts. Oh well, what's another body?");
     }
 }

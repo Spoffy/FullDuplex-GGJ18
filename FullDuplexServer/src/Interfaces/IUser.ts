@@ -5,5 +5,5 @@ export interface IUser {
     channel: TextChannel,
     server: Guild
 
-    send: (message: string) => boolean;
+    send: (message: string) => Promise<Message|Array<Message>>;
 }

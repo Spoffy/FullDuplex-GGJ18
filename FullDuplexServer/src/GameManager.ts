@@ -60,7 +60,7 @@ export class GameManager {
         let serializedMap = LoadMap("test");
         let map = GameMap.fromString(serializedMap);
 
-        let newGame = this.dataStore.playerGames[playerToJoin.user.id] = new Game(map);
+        let newGame = this.dataStore.playerGames[playerToJoin.user.id] = new Game(map, this);
         newGame.remotePlayer = playerToJoin;
         newGame.avatarPlayer = playerToJoin;
 
@@ -84,12 +84,5 @@ export class GameManager {
         }
         player.send("You have left the game, and are free to join another game.");
         return true;
-    }
-
-    win(game: Game) {
-        game.avatarPlayer.send("Congratulations, you reached the exit and escaped. Stay tuned for more levels," +
-            " or try the game from the other perspective!");
-        game.remotePlayer.send("Congratulations, you reached the exit and escaped. Stay tuned for more levels," +
-            " or try the game from the other perspective!");
     }
 }
