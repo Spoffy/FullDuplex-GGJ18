@@ -110,6 +110,8 @@ export class Commands {
         return true;
     };
 
+    static t: ICommand = (params, message, dataStore) => Commands.transmitter(params, message, dataStore);
+
     static doors: ICommand = (params, message, dataStore): boolean => {
         let game = dataStore.playerGames[message.author.id];
         if(!game) {
