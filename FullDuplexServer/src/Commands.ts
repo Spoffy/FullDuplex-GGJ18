@@ -142,8 +142,37 @@ export class Commands {
         let name = params[0] || "";
         let door = game.map.doors.find((door) => door.name.toLowerCase() == name.toLowerCase());
         if(door) {
+            if(!game.inRangeOfTransmitter(door.coords)) {
+                message.reply("Command Rejected: There is no connection to that door.");
+                return;
+            }
             door.isAccessible = true;
             message.reply("Command Accepted: Opening door " + door.name);
+        } else {
+            message.reply("Command Rejected: No door exists with that identifier.");
+        }
+        return true;
+    };
+
+    static close: ICommand = (params, message, dataStore): boolean => {
+        let game = dataStore.playerGames[message.author.id];
+        if(!game) {
+            message.reply("You are not currently in a game.");
+            return;
+        }
+        if(!game.isRemotePlayer(message.author.id)) {
+            message.reply("You don't feel like you could close any of the doors here... there's nothing to grip!");
+            return;
+        }
+        let name = params[0] || "";
+        let door: DoorRoom = game.map.doors.find((door) => door.name.toLowerCase() == name.toLowerCase());
+        if(door) {
+            if(!game.inRangeOfTransmitter(door.coords)) {
+                message.reply("Command Rejected: There is no connection to that door.");
+                return;
+            }
+            door.isAccessible = false;
+            message.reply("Command Accepted: Closing door " + door.name);
         } else {
             message.reply("Command Rejected: No door exists with that identifier.");
         }

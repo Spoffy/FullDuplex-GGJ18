@@ -53,9 +53,9 @@ export class GameManager {
 
     createNewGame(playerToJoin: IUser): Game {
         //Create a new game, if none is available.
-        let serializedMap = "xxxE\n" +
+        let serializedMap = "xxdE\n" +
                             "  x \n" +
-                            "xxx \n" +
+                            "xxd \n" +
                             "xx x\n" +
                             "dxxddddddddddddddddddddddddddddddddd\n";
         let map = GameMap.fromString(serializedMap);
