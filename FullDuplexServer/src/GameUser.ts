@@ -13,12 +13,12 @@ export class GameUser implements IUser {
     }
 
     send(message: string): boolean {
-        this.channel.send(message, {reply: this.user});
+        this.channel.send(message, {reply: this.user}).catch(console.error);
         return true;
     }
 
     static reply(originalMessage: Message, messageToSend: string): boolean {
-        originalMessage.reply(messageToSend);
+        originalMessage.reply(messageToSend).catch(console.error);
         return true;
     }
 }

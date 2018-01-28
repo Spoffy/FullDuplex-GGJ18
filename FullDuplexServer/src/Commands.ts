@@ -34,7 +34,9 @@ export class Commands {
 
     static quit: ICommand = (params, message, dataStore) => {
         let gameManager: GameManager = new GameManager(dataStore);
-        gameManager.quit(message.author.id);
+        if(!gameManager.quit(message.author.id)) {
+            GameUser.reply(message, "You are not currently playing a game");
+        }
         return true;
     };
 

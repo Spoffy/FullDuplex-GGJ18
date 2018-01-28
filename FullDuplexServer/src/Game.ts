@@ -5,6 +5,8 @@ import {IPoint} from "./Interfaces/IPoint";
 import {inSquareRange, isAdjacent} from "./Helpers/PointHelpers";
 import {IUser} from "./Interfaces/IUser";
 import {ITickable} from "./Interfaces/ITickable";
+import {IMonster} from "./Interfaces/IMonster";
+import {BaseMonster} from "./GameObjects/Monsters/BaseMonster";
 
 export class Game implements ITickable {
     remotePlayer: IUser;
@@ -16,13 +18,24 @@ export class Game implements ITickable {
 
     transmitterPower = 3;
 
+    monsters: Array<IMonster> = [];
+
     constructor(map: GameMap) {
         this.map = map;
         this.avatar = new Avatar(this, this.map.getRoom({x: 0, y: 0}));
+        this.spawnMonsters();
+    }
+
+    spawnMonsters() {
+        this.map.monsterRooms.forEach((room) => {
+            this.monsters.push(new BaseMonster(this, room));
+        })
     }
 
     tick() {
-
+        this.monsters.forEach((monster) => {
+            monster.tick();
+        })
     }
 
     isAvatarPlayer(playerId: Snowflake): boolean {

@@ -5,6 +5,7 @@ import {DoorRoom} from "./GameObjects/Rooms/DoorRoom";
 import {NATOAlphabetNameGenerator} from "./Helpers/NATOAlphabetNameGenerator";
 import {ExitRoom} from "./GameObjects/Rooms/ExitRoom";
 import {Avatar} from "./GameObjects/Avatar";
+import {MonsterRoom} from "./GameObjects/Rooms/MonsterRoom";
 
 export type MapData<T> = Array<Array<T>>;
 export type MapLayer = (room: IRoom, mapCoord: IPoint, char: string) => string;
@@ -12,6 +13,7 @@ export type MapLayer = (room: IRoom, mapCoord: IPoint, char: string) => string;
 export class GameMap {
     public mapData: MapData<IRoom>;
     public doors: Array<DoorRoom>;
+    public monsterRooms: Array<MonsterRoom>;
 
     static MAPKEY = "E = The Exit  |  d = Door  | x = Corridor";
 
@@ -21,11 +23,13 @@ export class GameMap {
         let map = new GameMap();
         map.mapData = [];
         map.doors = [];
+        map.monsterRooms = [];
 
         let doorNameGenerator = new NATOAlphabetNameGenerator();
 
         let line = [];
         for(let char of serializedMap) {
+            let newRoom: IRoom;
             switch(char) {
                 case "\n":
                     map.mapData.push(line);
@@ -35,12 +39,17 @@ export class GameMap {
                     line.push(new EmptyRoom());
                     break;
                 case "d":
-                    let newRoom = new DoorRoom(doorNameGenerator.next());
+                    newRoom = new DoorRoom(doorNameGenerator.next());
                     line.push(newRoom);
-                    map.doors.push(newRoom);
+                    map.doors.push(<DoorRoom>newRoom);
                     break;
                 case "E":
                     line.push(new ExitRoom());
+                    break;
+                case "M":
+                    newRoom = new MonsterRoom();
+                    line.push(newRoom);
+                    map.monsterRooms.push(<MonsterRoom>newRoom);
                     break;
                 case " ":
                     line.push(null);

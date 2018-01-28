@@ -10,7 +10,7 @@ export class Ticker implements ITickable {
     timer: Timer;
     tickRate: number;
 
-    constructor(dataStore: MemoryDataStore, tickRate: number = 200) {
+    constructor(dataStore: MemoryDataStore, tickRate: number = 1000) {
         this.dataStore = dataStore;
         this.gameManager = new GameManager(this.dataStore);
         this.tickRate = tickRate;
