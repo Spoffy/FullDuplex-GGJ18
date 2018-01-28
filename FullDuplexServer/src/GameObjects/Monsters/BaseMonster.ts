@@ -16,6 +16,7 @@ export class BaseMonster implements IMonster {
     protected state = "";
     protected counter = 0;
     protected counterTarget = 0;
+    protected heading = null;
 
     constructor(game: Game, room: IRoom) {
         this.game = game;
@@ -33,6 +34,7 @@ export class BaseMonster implements IMonster {
     }
 
     tick() {
+
         switch(this.state) {
             case "wait":
                 this.performWait();
@@ -42,9 +44,78 @@ export class BaseMonster implements IMonster {
             case "wandering":
                 this.performWandering();
                 break;
+            case "chase":
+                this.performChase();
+                break;
             default:
                 this.chooseBehaviour();
                 break;
+        }
+
+        this.angered = false;
+        this.attemptChase();
+    }
+
+    attemptChase() {
+        let heading = this.searchForAvatar();
+        if(heading) {
+            this.state = "chase";
+            this.heading = heading;
+        }
+    }
+
+    performChase() {
+        if(!this.heading || this.heading.dist <= 0) {
+            this.state = "";
+            return this.tick();
+        }
+        this.moveToRoom(this.room[this.heading.dir]);
+        this.heading.dist -= 1;
+    }
+
+    searchForAvatar() {
+        let room: IRoom = this.room;
+        let dist = 0;
+
+        while(room.north) {
+            room = room.north;
+            dist += 1;
+            if(this.game.avatar.room == room) {
+                return {dir: "north", dist: dist};
+            }
+        }
+
+        room = this.room;
+        dist = 0;
+
+        while(room.east) {
+            room = room.east;
+            dist += 1;
+            if(this.game.avatar.room == room) {
+                return {dir: "east", dist: dist};
+            }
+        }
+
+        room = this.room;
+        dist = 0;
+
+        while(room.south) {
+            room = room.south;
+            dist += 1;
+            if(this.game.avatar.room == room) {
+                return {dir: "south", dist: dist};
+            }
+        }
+
+        room = this.room;
+        dist = 0;
+
+        while(room.west) {
+            room = room.west;
+            dist += 1;
+            if(this.game.avatar.room == room) {
+                return {dir: "west", dist: dist};
+            }
         }
     }
 
@@ -57,7 +128,6 @@ export class BaseMonster implements IMonster {
             }
         } else {
             this.state = "wandering";
-            this.angered = false;
         }
     }
 
