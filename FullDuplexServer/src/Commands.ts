@@ -125,9 +125,9 @@ export class Commands {
                 "were to write it down, or ask your overseer?");
             return;
         }
-        let response = "Command Accepted: Accessing map database...\n" +
+        let response = "Command Accepted: Accessing map database...\n```" +
                 GameMap.MAPKEY + "\n" +
-                game.map.toString();
+                game.map.toString() + "```";
         message.reply(response);
     };
 
