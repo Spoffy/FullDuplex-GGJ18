@@ -22,6 +22,9 @@ export class BaseMonster implements IMonster {
     }
 
     moveToRoom(room: IRoom): boolean {
+        if(!room.isAccessible) {
+            return false;
+        }
         this.room.monsters.delete(this);
         this.room = room;
         this.room.monsters.add(this);
@@ -57,7 +60,10 @@ export class BaseMonster implements IMonster {
     }
 
     performWandering() {
-        let validDirections = this.room.adjacentRooms;
+        let adjacentRooms = this.room.adjacentRooms;
+        let nextRoom = adjacentRooms[Math.floor(Math.random() * adjacentRooms.length)];
+        this.moveToRoom(nextRoom);
+        this.state = "";
     }
 
     performAngering() {

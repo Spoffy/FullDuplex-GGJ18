@@ -3,7 +3,7 @@ import {MessageProcessor} from "./MessageProcessor";
 import {MemoryDataStore} from "./Storage/MemoryDataStore";
 import {Ticker} from "./Ticker";
 
-const client = new Discord.Client({restTimeOffset: 200, apiRequestMethod: 'sequential'});
+const client = new Discord.Client({restWsBridgeTimeout: 1000, restTimeOffset: 200, apiRequestMethod: 'burst'});
 const token = "NDA2NTY2ODIxNDUwNDgxNjg0.DU3XMQ.r9rkbnl8ARmWnGYmXCTP7dtoGv4";
 const dataStore = new MemoryDataStore();
 const messageProcessor = new MessageProcessor(dataStore);
