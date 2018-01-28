@@ -8,9 +8,9 @@ export class BaseMonster implements IMonster {
 
     angerSpeed = 5;
 
-    description = "a large, angry werewolf";
+    description = "a deformed, rotting human with long, spiderlike limbs and chittering mandibles.";
     creatureAngeringMessage = "The creature growls and fixes you with hungering eyes.";
-    creatureKillingMessage = "The creature swipes at you with barbed claws. After a flash of pain - nothing.";
+    creatureKillingMessage = "The creature coils its iron legs around you, as the mandibles close in around your throat.";
 
     protected angered = false;
     protected state = "";
