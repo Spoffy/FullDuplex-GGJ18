@@ -127,7 +127,7 @@ export class Commands {
         }
         let response = "Command Accepted: Accessing map database...\n```" +
                 GameMap.MAPKEY + "\n" +
-                game.map.toString() + "```";
+                game.map.toVisual([BooleanMapFilter(game.knownMap)]) + "```";
         message.reply(response);
     };
 
@@ -144,7 +144,7 @@ export class Commands {
         let response = "Command Accepted: Accessing map database...\n```" +
             GameMap.MAPKEY + "\n" +
             "P = Player" + "\n" +
-            game.map.toVisual([PlayerFinderLayer(game.avatar)]) +
+            game.map.toVisual([BooleanMapFilter(game.knownMap), PlayerFinderLayer(game.avatar)]) +
             "```";
         message.reply(response);
     };
@@ -154,7 +154,8 @@ export class Commands {
     static debug: ICommand = (params, message, dataStore): boolean => {
         let game = new GameManager(dataStore).findGameInProgress(message.author.id);
         //console.log(game.map.mapData.map((line) => line.map((room) => {if (room) return "x"})));
-        console.log(game.map.toVisual([BooleanMapFilter([[true, true, true, true]])]));
+        game.revealArea({x: 1, y: 1}, 1);
+        console.log(game.knownMap);
         return true;
     };
 

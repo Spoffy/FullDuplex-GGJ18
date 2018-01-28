@@ -103,7 +103,7 @@ export class GameMap {
 
 export function BooleanMapFilter(filterMap: MapData<boolean>): MapLayer {
     return function(room: IRoom, point: IPoint, char: string) {
-        return filterMap[point.y] && filterMap[point.y][point.x]? char : " ";
+        return filterMap[point.y] && filterMap[point.y][point.x]? char : "?";
     }
 }
 

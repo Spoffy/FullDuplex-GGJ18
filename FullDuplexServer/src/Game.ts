@@ -1,13 +1,14 @@
 import {Avatar} from "./GameObjects/Avatar";
 import {GameMap} from "./GameMap";
 import {Snowflake, User, TextChannel, Guild} from "discord.js";
+import {IPoint} from "./Interfaces/IPoint";
 
 export class Game {
     remotePlayer: {user: User, channel: TextChannel, server: Guild};
     avatarPlayer: {user: User, channel: TextChannel, server: Guild};
 
     avatar: Avatar;
-    knownMap: Array<Array<boolean>>;
+    knownMap: Array<Array<boolean>> = [];
     map: GameMap;
 
     constructor(map: GameMap) {
@@ -21,5 +22,15 @@ export class Game {
 
     isRemotePlayer(playerId: Snowflake): boolean {
         return this.remotePlayer && this.remotePlayer.user.id == playerId;
+    }
+
+    revealArea(center: IPoint, radius: number) {
+        for(let y = center.y - radius; y <= center.y + radius; y++) {
+            for(let x = center.x - radius; x <= center.x + radius; x++) {
+                let row = this.knownMap[y] || []
+                row[x] = true;
+                this.knownMap[y] = row;
+            }
+        }
     }
 }
