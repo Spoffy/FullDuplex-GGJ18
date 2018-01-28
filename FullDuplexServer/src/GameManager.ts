@@ -75,14 +75,16 @@ export class GameManager {
         if(!game) {
             return false;
         }
-        let player = game.avatarPlayer.user.id == playerId? game.avatarPlayer : game.remotePlayer;
-        let otherPlayer = game.avatarPlayer.user.id == playerId? game.remotePlayer : game.avatarPlayer;
-        delete this.dataStore.playerGames[player.user.id];
-        if(otherPlayer) {
-            delete this.dataStore.playerGames[otherPlayer.user.id];
-            otherPlayer.send("The other player has left the game, so the game has exited.");
-        }
-        player.send("You have left the game, and are free to join another game.");
+        let players = [game.avatarPlayer, game.remotePlayer];
+        players.forEach((player) => {
+            if(!player) { return; }
+            delete this.dataStore.playerGames[player.user.id];
+            if(player.user.id == playerId) {
+                player.send("You have left the game and are free to join another game.");
+            } else {
+                player.send("The game has exited due to the other player leaving.");
+            }
+        });
         return true;
     }
 
