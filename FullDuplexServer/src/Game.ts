@@ -4,8 +4,9 @@ import {Guild, Snowflake, TextChannel, User} from "discord.js";
 import {IPoint} from "./Interfaces/IPoint";
 import {inSquareRange, isAdjacent} from "./Helpers/PointHelpers";
 import {IUser} from "./Interfaces/IUser";
+import {ITickable} from "./Interfaces/ITickable";
 
-export class Game {
+export class Game implements ITickable {
     remotePlayer: IUser;
     avatarPlayer: IUser;
 
@@ -18,6 +19,10 @@ export class Game {
     constructor(map: GameMap) {
         this.map = map;
         this.avatar = new Avatar(this, this.map.getRoom({x: 0, y: 0}));
+    }
+
+    tick() {
+        
     }
 
     isAvatarPlayer(playerId: Snowflake): boolean {

@@ -12,6 +12,10 @@ export class GameManager {
         this.dataStore = dataStore;
     }
 
+    get games(): Array<Game> {
+        return Object.keys(this.dataStore.playerGames).map((key) => this.dataStore.playerGames[key]);
+    }
+
     findGameInProgress(playerId: Snowflake): Game {
         return this.dataStore.playerGames[playerId];
     }
