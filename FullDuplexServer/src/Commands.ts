@@ -4,6 +4,7 @@ import {DoorRoom} from "./GameObjects/Rooms/DoorRoom";
 import {TextChannel} from "discord.js"
 import {GameManager} from "./GameManager";
 import {BooleanMapFilter, GameMap, PlayerFinderLayer} from "./GameMap";
+import {packetizeAndSend} from "./Helpers/DiscordHelpers";
 
 export class Commands {
     static ping: ICommand = (params, message, dataStore) => {
@@ -117,9 +118,14 @@ export class Commands {
             message.reply("You've seen quite a few doors in your lifetime.");
             return;
         }
-        message.reply(game.map.doors.reduce((content: string, door: DoorRoom) => {
-           return content + `Door: **${door.name}** - __Status__: ` + (door.isAccessible? "*OPEN*" : "**CLOSED**") + "\n";
-        }, "Command Accepted:\n"));
+
+        let response = game.map.doors.reduce((content: string, door: DoorRoom) => {
+            let accessibility = door.isAccessible? "*OPEN*" : "**CLOSED**";
+            let connectivity = game.inRangeOfTransmitter(door.coords)? "**CONNECTED**" : "*DISCONNECTED*";
+            return content + `Door: **${door.name}** - __Connection__: ` + connectivity + "  - __State__: " + accessibility + "\n";
+        }, "Command Accepted:\n");
+
+        packetizeAndSend(response, message.reply.bind(message));
         return true;
     };
 

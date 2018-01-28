@@ -2,6 +2,7 @@ import {Avatar} from "./GameObjects/Avatar";
 import {GameMap} from "./GameMap";
 import {Guild, Snowflake, TextChannel, User} from "discord.js";
 import {IPoint} from "./Interfaces/IPoint";
+import {inSquareRange} from "./Helpers/PointHelpers";
 
 export class Game {
     remotePlayer: {user: User, channel: TextChannel, server: Guild};
@@ -34,5 +35,11 @@ export class Game {
                 this.knownMap[y] = row;
             }
         }
+    }
+
+    inRangeOfTransmitter(loc: IPoint): boolean {
+        return this.avatar.transmitterRooms.some((room) => {
+            return inSquareRange(room.coords, loc, this.transmitterPower);
+        })
     }
 }
