@@ -57,7 +57,7 @@ export class GameManager {
 
     createNewGame(playerToJoin: IUser): Game {
         //Create a new game, if none is available.
-        let serializedMap = LoadMap("test");
+        let serializedMap = LoadMap("compound");
         let map = GameMap.fromString(serializedMap);
 
         let newGame = this.dataStore.playerGames[playerToJoin.user.id] = new Game(map, this);

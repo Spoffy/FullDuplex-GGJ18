@@ -260,7 +260,8 @@ export class Commands {
         //console.log(game.transmitterPower);
         //console.log(LoadMap("simple"));
         //console.log(game.avatar.room.adjacentRooms);
-        return true;
+        throw new Error("Test Error");
+        //return true;
     };
 
     static exit: ICommand = (params, message, dataStore): boolean => {
