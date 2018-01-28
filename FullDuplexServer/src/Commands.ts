@@ -160,7 +160,7 @@ export class Commands {
             return;
         }
         let name = params[0] || "";
-        let door = game.map.doors.find((door) => door.name.toLowerCase() == name.toLowerCase());
+        let door: DoorRoom = game.map.doors.find((door) => door.name.toLowerCase() == name.toLowerCase());
         if(door) {
             if(!game.inRangeOfTransmitter(door.coords)) {
                 player.send("Command Rejected: There is no connection to that door.");
@@ -168,6 +168,7 @@ export class Commands {
             }
             door.isAccessible = true;
             player.send("Command Accepted: Opening door " + door.name);
+            game.localMessage(door.coords, `The nearby door ${door.name} clunks loudly, releasing the lock before sliding open.`);
         } else {
             player.send("Command Rejected: No door exists with that identifier.");
         }
@@ -196,6 +197,7 @@ export class Commands {
             }
             door.isAccessible = false;
             player.send("Command Accepted: Closing door " + door.name);
+            game.localMessage(door.coords, `The nearby door ${door.name} groans and slides shut, locking with a dull thud.`);
         } else {
             player.send("Command Rejected: No door exists with that identifier.");
         }

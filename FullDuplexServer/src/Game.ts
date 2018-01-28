@@ -2,7 +2,7 @@ import {Avatar} from "./GameObjects/Avatar";
 import {GameMap} from "./GameMap";
 import {Guild, Snowflake, TextChannel, User} from "discord.js";
 import {IPoint} from "./Interfaces/IPoint";
-import {inSquareRange} from "./Helpers/PointHelpers";
+import {inSquareRange, isAdjacent} from "./Helpers/PointHelpers";
 import {IUser} from "./Interfaces/IUser";
 
 export class Game {
@@ -35,6 +35,13 @@ export class Game {
         if(this.isRemotePlayer(playerId)) {
             return this.remotePlayer;
         }
+    }
+
+    localMessage(location: IPoint, message: string): boolean {
+        if(isAdjacent(location, this.avatar.room.coords)) {
+            return this.avatarPlayer.send(message);
+        }
+        return false;
     }
 
     revealArea(center: IPoint, radius: number) {
