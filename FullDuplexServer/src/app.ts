@@ -4,7 +4,7 @@ import {Ticker} from "./Ticker";
 import {Message, Snowflake, Client, User} from "discord.js";
 
 const client = new Client({restWsBridgeTimeout: 5000, restTimeOffset: 300, apiRequestMethod: 'sequential'});
-const token = "NDA2NTY2ODIxNDUwNDgxNjg0.DU3XMQ.r9rkbnl8ARmWnGYmXCTP7dtoGv4";
+const token = "";
 const dataStore = new MemoryDataStore();
 const messageProcessor = new MessageProcessor(dataStore);
 const ticker = new Ticker(dataStore);
