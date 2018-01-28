@@ -11,4 +11,6 @@ export interface IRoom {
 
     isAccessible: boolean;
     inaccessibleReason: string;
+
+    exitText: string;
 }

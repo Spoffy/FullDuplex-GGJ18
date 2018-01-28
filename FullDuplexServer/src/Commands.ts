@@ -44,7 +44,7 @@ export class Commands {
             message.reply("You are not controlling a character, you are remotely accessing the site.")
             return;
         }
-        message.reply("You are in: " + game.avatar.room.description);
+        message.reply("You are in: " + game.avatar.room.description + "\n\n" + game.avatar.room.exitText);
         return true;
     };
 
@@ -63,7 +63,8 @@ export class Commands {
             message.reply("That is not a valid direction");
         }
         game.avatar.move(Direction[direction.toUpperCase()]).then(() =>{
-               message.reply("You move " + direction + " into a new room. You are in " + game.avatar.room.description);
+               message.reply("You move " + direction + " into a new room. You are in " + game.avatar.room.description +
+                             "\n\n" + game.avatar.room.exitText);
            }, (reason) => {
                message.reply("You try to move " + direction + ", but " + reason);
            });

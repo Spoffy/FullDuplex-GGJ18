@@ -21,8 +21,7 @@ export class DoorRoom extends BaseRoom {
         return this.descriptionStart
             + (this.isAccessible?
                 `. The edges of a heavy, reinforced door are barely visible nestled within the walls. Nearby is a sign saying "${this.name}".` :
-                ` blocked off by a reinforced automatic door, dotted with patches of rust. On it, printed in large, red letters is "${this.name}".`)
-            + this.exitText();
+                ` blocked off by a reinforced automatic door, dotted with patches of rust. On it, printed in large, red letters is "${this.name}".`);
     }
 
     set description(mesg: string) {

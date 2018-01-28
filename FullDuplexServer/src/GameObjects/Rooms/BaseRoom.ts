@@ -15,19 +15,18 @@ export class BaseRoom implements IRoom {
     inaccessibleReason = "there's a wall in the way";
 
     get description(): string {
-        return this.baseDescription + "\n"
-            + this.exitText();
+        return this.baseDescription;
     }
 
     set description(newDescription: string) {
         this.baseDescription = newDescription;
     }
 
-    protected exitText(): string {
+    get exitText(): string {
         return "There are exits to the:\n"
-            + (this.north? "- North\n" : "")
-            + (this.east? "- East\n" : "")
-            + (this.south? "- South\n" : "")
-            + (this.west? "- West\n" : "");
+            + (this.north? `- North: ${this.north.description}\n` : "")
+            + (this.east? `- East: ${this.east.description}\n` : "")
+            + (this.south? `- South: ${this.south.description}\n` : "")
+            + (this.west? `- West: ${this.west.description}\n` : "");
     }
 }
